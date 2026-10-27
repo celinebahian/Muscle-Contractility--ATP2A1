@@ -2,6 +2,8 @@
 install.packages(c("rentrez", "ggplot2"))
 library(rentrez)
 library(ggplot2)
+
+#Step 1. Set up your R project
 # CHANGE THESE FOUR VALUES to your assignment (example: ACTA1):
 gene_symbol <- "ATP2A1"
 transcript_accession <- "NM_004320.6" 
@@ -43,6 +45,7 @@ writeLines(c(
   paste("Chromosome:", gene_info$chromosome)
 ), "results/gene_summary.txt")
 
+#Step 3. Retrieve the matching protein sequence from the assigned transcript
 gb <- entrez_fetch(
   db = "nuccore",
   id = transcript_accession,
@@ -71,6 +74,7 @@ cat("Matched protein:", protein_accession, "\n")
 writeLines(paste("NP accession:", protein_accession), 
            "results/protein_accession.txt")
 
+#Step 4. Analyze protein length and amino-acid composition in R
 fasta_lines <- readLines(fasta_file)
 sequence <- paste(fasta_lines[!grepl("^>", fasta_lines)], 
                   collapse = "")
@@ -92,6 +96,7 @@ print(fig1)
 ggsave("figures/01_amino_acid_composition.png", 
        fig1, width = 8, height = 5, dpi = 300)
 
+#Step 6. Produce a second biological visualization
 # OPTIONAL: make a protein-position figure from an HGVS p. change. 
 # Do not use for variant_protein == "" (splice-only variants). 
 if (nzchar(variant_protein)) {
